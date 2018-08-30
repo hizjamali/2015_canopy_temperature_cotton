@@ -7,6 +7,7 @@ library(readr)
 
 df <- read_csv("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data/ct_database_ds.csv")
 
+<<<<<<< HEAD
 sensors <- list.files("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data", full.names = T,pattern = "s*.csv", recursive = T) %>% 
   as.tibble() %>% 
   filter(!str_detect(value, pattern = "database")) %>% 
@@ -22,3 +23,6 @@ sensors <- list.files("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data",
 file.copy(sensors$value, sensors$new_path)
 
 dirname("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data/ct_database_ds.csv")
+=======
+# testing pull push
+>>>>>>> 324e3b4df73e1b7c886e900df32dd7e7c2648859
