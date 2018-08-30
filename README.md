@@ -2,6 +2,16 @@ Created by: Hizbullah Jamali;
 email: hi.jamali@csiro.au
 Created on: 29/08/2018
 
+This collection consists of several experiments conducted in fully irrigated, partially irrigated and dryland cotton in Australia and the USA. 
+Below is a list of CSIRO staff who were involved in generating this data and their level of access to this data:
+1.	Hizbullah Jamali (read/write)
+2.	Tracey May (read/write)
+3.	Christopher Nunn (read/write)
+4.	Rose Brodrick (read/write)
+5.	Michael Bange (read/write)
+6.	Quanxi Shao (read only)
+7.	Warren Jin (read only)
+
 This data set consists:
 1) canopy temperature sensor files 
 2) Weather files for different sites
