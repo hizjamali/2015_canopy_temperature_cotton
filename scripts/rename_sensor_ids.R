@@ -19,6 +19,6 @@ sensors <- list.files("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data",
   unite(col = "sensor_uid", year, location, sensor, sep = "_", remove = F) %>% 
   unite(col = "new_path", path, sensor_uid, sep = "/", remove = F)
 
-file.rename(sensors$value, sensors$new_path)
+file.copy(sensors$value, sensors$new_path)
 
 dirname("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data/ct_database_ds.csv")
