@@ -6,28 +6,40 @@
 rm(list=ls(all=TRUE))##clear workspace
 print(ls())##check output is zero to confirm clear workspace
 
-
 library(tidyverse)
-library(readr)
 
-df <- read_csv("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data/ct_database_ds.csv")
+setwd("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data/")
 
-sensors <- list.files("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data", full.names = T,pattern = "s*.csv", recursive = T) %>% 
+meta_data <- read_csv("ct_database_ds.csv")
+
+sensors <- list.files(full.names = F,pattern = "s*.csv", recursive = T) %>% 
   as.tibble() %>% 
   filter(!str_detect(value, pattern = "database")) %>% 
   mutate(path = dirname(value),
-         sensor_filename = basename(value)) %>% 
-  separate(col = value, sep = "/", into = c("path","year", "location","experiment","sensor"), extra = "merge",fill = "right") %>% 
-  mutate(sensor = str_remove(sensor, pattern = "^s")) %>% 
-  unite(col = "sensor_uid", experiment, sensor, sep = "_", remove = F) %>% 
-  #unite(col = "sensor_uid", year, location, sensor, sep = "_", remove = F) %>% 
-  unite(col = "new_path", path, sensor_uid, sep = "/", remove = F)
+         sensor_filename = basename(value)) %>%
+  separate(col = path, sep = "/", into = c("year","location","experiment"), remove = F, extra = "merge",fill = "right") %>%
+  mutate(sensor_filename = str_remove(sensor_filename, pattern = "^s")) %>% 
+  mutate(sensor = str_remove(sensor_filename, pattern = ".csv")) %>% 
+  mutate(uniq_ID = paste(year, location, sensor, sep = "_")) %>% 
+  mutate(sensor_filename_new = paste0(uniq_ID,".csv")) %>% 
+  mutate(new_dir = paste("renamed_files", year, location, experiment, sep = "/")) %>% 
+  mutate(new_path = paste(new_dir, sensor_filename_new, sep = "/"))
+  
 
+# Check which data streams are missing from metadata table
+anti_join(meta_data,sensors)
+anti_join(sensors,meta_data)
 
+# filter metadata to only change stream files with a metadata entry
+meta_data_available <- select(meta_data, uniq_ID) %>% 
+  inner_join(sensors)
 
-#file.copy(sensors$value, sensors$new_path)
+# create new copy for each data stream renamed with the uniq_ID
+new_directories <- as.vector(unique(meta_data_available$new_dir))
 
-dirname("P:/ChrisN/R scripts/2015_canopy_temperature_cotton/data/ct_database_ds.csv")
-=======
-# testing pull push
->>>>>>> 324e3b4df73e1b7c886e900df32dd7e7c2648859
+for (i in 1:length(new_directories)) {
+  dir.create(new_directories[i], recursive = T)
+}
+
+file.copy(meta_data_available$value, meta_data_available$new_path)
+
